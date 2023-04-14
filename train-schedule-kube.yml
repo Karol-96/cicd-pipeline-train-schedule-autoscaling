@@ -1,3 +1,4 @@
+---
 kind: Service
 apiVersion: v1
 metadata:
@@ -7,19 +8,17 @@ spec:
   selector:
     app: train-schedule
   ports:
-  - protocol: TCP
-    port: 8080
-    nodePort: 8080
+    - protocol: TCP
+      port: 8080
+      nodePort: 8080
 
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: train-schedule-deployment
   labels:
     app: train-schedule
-    
 spec:
   replicas: 2
   selector:
@@ -31,23 +30,22 @@ spec:
         app: train-schedule
     spec:
       containers:
-      - name: train-schedule
-        image: linuxacademycontent/train-schedule:autoscaling
-        ports:
-        - containerPort: 8080
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 8080
-          initialDelaySeconds: 15
-          timeoutSeconds: 1
-          periodSeconds: 10
-         resources:
-           requests:
-           cpu: 200m
-          
----
+        - name: train-schedule
+          image: linuxacademycontent/train-schedule:autoscaling
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+            periodSeconds: 10
+          resources:
+            requests: null
+            cpu: 200m
 
+---
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -61,7 +59,7 @@ spec:
   minReplicas: 1
   maxReplicas: 4
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      targetAverageUtilization: 50
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 50
