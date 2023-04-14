@@ -19,6 +19,7 @@ metadata:
   name: train-schedule-deployment
   labels:
     app: train-schedule
+    
 spec:
   replicas: 2
   selector:
@@ -41,9 +42,9 @@ spec:
           initialDelaySeconds: 15
           timeoutSeconds: 1
           periodSeconds: 10
-      resources:
-          requests:
-          cpu: 200m
+         resources:
+           requests:
+           cpu: 200m
           
 ---
 
